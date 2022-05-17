@@ -16,8 +16,6 @@ from pyproj import Geod
 sc = pyspark.SparkContext.getOrCreate()
 spark = SparkSession(sc)
 
-weekly_patterns = spark.read.option('escape','"').load('/tmp/bdm/weekly-patterns-nyc-2019-2020', format='csv', header=True, inferSchema=True).select('placekey', 'poi_cbg', 'visitor_home_cbgs', 'date_range_start','date_range_end')
-
 nyc_sup = spark.read.load('/content/drive/MyDrive/BDM/final/nyc_supermarkets.csv', format='csv', header=True, inferSchema=True).cache()
 nyc_cbg_cen = spark.read.load('/content/drive/MyDrive/BDM/final/nyc_cbg_centroids.csv', format='csv', header=True, inferSchema=True).cache()
 weekly_pattern = spark.read.option('escape','"').load('weekly-patterns-nyc-2019-2020-sample.csv', format='csv', header=True, inferSchema=True).select('placekey', 'poi_cbg', 'visitor_home_cbgs', 'date_range_start','date_range_end')\
