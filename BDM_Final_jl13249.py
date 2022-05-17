@@ -18,12 +18,12 @@ spark = SparkSession(sc)
 
 weekly_patterns = spark.read.option('escape','"').load('/tmp/bdm/weekly-patterns-nyc-2019-2020', format='csv', header=True, inferSchema=True).select('placekey', 'poi_cbg', 'visitor_home_cbgs', 'date_range_start','date_range_end')
 
-nyc_sup = spark.read.load('nyc_supermarkets.csv', format='csv', header=True, inferSchema=True).cache()
-nyc_cbg_cen = spark.read.load('nyc_cbg_centroids.csv', format='csv', header=True, inferSchema=True).cache()
-join_weeklyPatterns_nycSup = weekly_patterns.join(nyc_sup, weekly_patterns.placekey==nyc_sup.safegraph_placekey, how='inner')
-
-join_weeklyPatterns_nycSup = join_weeklyPatterns_nycSup.withColumn('date_range_start_substr',col('date_range_start').substr(0,7))
-join_weeklyPatterns_nycSup = join_weeklyPatterns_nycSup.withColumn('date_range_end_substr',col('date_range_end').substr(0,7))
+nyc_sup = spark.read.load('/content/drive/MyDrive/BDM/final/nyc_supermarkets.csv', format='csv', header=True, inferSchema=True).cache()
+nyc_cbg_cen = spark.read.load('/content/drive/MyDrive/BDM/final/nyc_cbg_centroids.csv', format='csv', header=True, inferSchema=True).cache()
+weekly_pattern = spark.read.option('escape','"').load('weekly-patterns-nyc-2019-2020-sample.csv', format='csv', header=True, inferSchema=True).select('placekey', 'poi_cbg', 'visitor_home_cbgs', 'date_range_start','date_range_end')\
+      .withColumn('date_range_start_substr',col('date_range_start').substr(0,7))\
+      .withColumn('date_range_end_substr',col('date_range_end').substr(0,7))
+join_weeklyPattern_nycSup = weekly_pattern.join(nyc_sup, weekly_pattern.placekey==nyc_sup.safegraph_placekey, how='inner') 
 
 def func_date(start,end):
   if start == '2019-03' or end == '2019-03':
