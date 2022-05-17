@@ -53,7 +53,7 @@ df_distance = df_distance.join(nyc_cbg_cen,df_distance.col==nyc_cbg_cen.cbg_fips
 
 wgs84_geod = Geod(ellps='WGS84')
 def func_distance(org_lat, org_lon, lat, lon):
-    az12, az21, dist = wgs84_geod.inv(org_lon, org_lat, lon2, lat2)
+    az12, az21, dist = wgs84_geod.inv(org_lon, org_lat, lon, lat)
     distance = dist * 0.00062137
     return distance
 
